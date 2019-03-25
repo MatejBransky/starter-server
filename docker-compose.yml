@@ -1,0 +1,22 @@
+# docker-compose.yml
+version: '3'
+services:
+  db:
+    image: postgres:10.7-alpine
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:5432
+  auth:
+    image: jboss/keycloak
+    environment:
+      KEYCLOAK_USER: ${AUTH_USER}
+      KEYCLOAK_PASSWORD: ${AUTH_PASSWORD}
+    ports:
+      - ${AUTH_PORT}:8080
+  adminer:
+    image: adminer
+    ports:
+      - ${ADMINER_PORT}:8080
