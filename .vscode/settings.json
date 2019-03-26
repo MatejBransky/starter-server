@@ -19,5 +19,8 @@
     }
   ],
   "typescript.tsdk": "./node_modules/typescript/lib",
-  "debug.node.autoAttach": "on"
+  "debug.node.autoAttach": "on",
+  "files.associations": {
+    ".env.template": "dotenv"
+  }
 }
