@@ -5,6 +5,7 @@ import session from 'express-session';
 import bodyParser from 'body-parser';
 import Keycloak from 'keycloak-connect';
 
+import reset from './routes/reset';
 import users from './routes/users';
 import hobbies from './routes/hobbies';
 import sequelize from './sequelize';
@@ -27,6 +28,9 @@ const keycloak = new Keycloak(
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+if (process.env.NODE_ENV === 'test') {
+  app.use('/reset', reset);
+}
 app.use('/public', express.static('public'));
 app.use('/users', keycloak.middleware(), users);
 app.use('/hobbies', hobbies);
