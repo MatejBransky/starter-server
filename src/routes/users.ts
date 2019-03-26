@@ -11,11 +11,10 @@ router
     res.send(users);
   })
   .post(async (req, res) => {
-    const user = await User.create({
-      name: 'Alenka',
-      birthday: '10.6.1991',
-      hobbies: [],
-    });
+    const user = new User();
+    user.name = req.body.name;
+    user.birthday = req.body.birthday;
+    await user.save();
     res.send(user);
   });
 

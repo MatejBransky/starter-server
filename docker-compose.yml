@@ -16,6 +16,9 @@ services:
       KEYCLOAK_PASSWORD: ${AUTH_PASSWORD}
     ports:
       - ${AUTH_PORT}:8080
+    volumes:
+      - ./realm-example.json:/opt/jboss/keycloak/realm-example.json
+    command: '-b 0.0.0.0 -Dkeycloak.import=/opt/jboss/keycloak/realm-example.json'
   adminer:
     image: adminer
     ports:

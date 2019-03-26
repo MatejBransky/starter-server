@@ -2,7 +2,7 @@ import path from 'path';
 import { Sequelize } from 'sequelize-typescript';
 import { Op } from 'sequelize';
 
-let sequelize = undefined;
+let sequelize;
 
 if (
   process.env.DB_NAME &&

@@ -1,0 +1,244 @@
+{
+	"info": {
+		"_postman_id": "df2a7854-d010-449b-ac90-10232f167235",
+		"name": "starter-server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{authClient}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{authSecret}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8888/auth/realms/example/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"auth",
+						"realms",
+						"example",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				},
+				"description": "Get token"
+			},
+			"response": []
+		},
+		{
+			"name": "List Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/users",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Hobbies",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{host}}/hobbies",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"hobbies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Martin",
+							"type": "text"
+						},
+						{
+							"key": "birthday",
+							"value": "1995-05-10T11:43Z",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/users",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "40fd4b94-553f-427b-aa4b-c5415a9f20f3",
+				"type": "text/javascript",
+				"exec": [
+					"const url = `${pm.variables.get('authUrl')}/auth/realms/${pm.variables.get('authRealm')}/protocol/openid-connect/token`;",
+					"",
+					"pm.sendRequest({",
+					"    url,",
+					"    method: 'POST',",
+					"    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },",
+					"    body: {",
+					"        mode: 'urlencoded',",
+					"        urlencoded: [",
+					"            {",
+					"                key: 'grant_type',",
+					"                value: 'client_credentials'",
+					"            },",
+					"            {",
+					"                key: 'client_id',",
+					"                value: pm.variables.get('authClient')",
+					"            },",
+					"            {",
+					"                key: 'client_secret',",
+					"                value: pm.variables.get('authSecret')",
+					"            },",
+					"            {",
+					"                key: 'redirect_uri',",
+					"                value: pm.variables.get('host')",
+					"            }",
+					"        ]",
+					"    }",
+					"}, (err, response) => {",
+					"    const json = response.json();",
+					"    const token = json.access_token;",
+					"    pm.globals.set('accessToken', token);",
+					"});",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "7b052425-c9ba-4129-869f-2c7f10d6d540",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "dd924331-df92-4d11-a989-3c832e7b656b",
+			"key": "host",
+			"value": "http://localhost:4444",
+			"type": "string"
+		},
+		{
+			"id": "8820197b-a461-4b24-9f49-6b3091a8afbc",
+			"key": "authUrl",
+			"value": "http://localhost:8888",
+			"type": "string"
+		},
+		{
+			"id": "d645e2ba-7c93-4268-8014-7f478807f0eb",
+			"key": "authClient",
+			"value": "client",
+			"type": "string"
+		},
+		{
+			"id": "ac09bb85-e063-4102-ac8e-de6710edae62",
+			"key": "authSecret",
+			"value": "e874d1ff-42ed-41c0-9461-c9228f36d623",
+			"type": "string"
+		},
+		{
+			"id": "9d83edd4-f0ed-4969-81ab-9608aa629ee7",
+			"key": "authRealm",
+			"value": "example",
+			"type": "string"
+		}
+	]
+}
